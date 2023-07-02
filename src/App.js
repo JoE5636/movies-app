@@ -24,9 +24,16 @@ function App() {
   }
 
   return (
-    <div className="gap-10">
-      <h1 className="text-3xl font-bold text-blue-500">Movie List</h1>
-      <form className="flex gap-8" onSubmit={handleSubmit}>
+    <div className=" flex flex-col justify-center items-center gap-10">
+      <div className="flex justify-center items-center">
+        <h1 className="text-5xl font-bold text-blue-500 text-center">
+          Movie List
+        </h1>
+      </div>
+      <form
+        className="flex gap-8 justify-center items-center"
+        onSubmit={handleSubmit}
+      >
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Search Type
@@ -56,7 +63,7 @@ function App() {
         <input
           type="submit"
           value="Search"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-sm"
         />
       </form>
       {movies !== null ? (
