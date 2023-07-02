@@ -1,26 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function App() {
   const [movies, setMovies] = useState(null);
-  const [type, setType] = useState("movie");
-  const [search, setSearch] = useState("fantasia");
+  const [search, setSearch] = useState("");
+  const [type, setType] = useState("");
 
   const key = "3b67358c";
-  useEffect(() => {
-    fetch(
-      `http://www.omdbapi.com/?apikey=${key}&type=${type}&s=${search}&page=1-100`
-    )
-      .then((response) => response.json())
-      .then((data) => setMovies(data));
-  }, [type, search]);
+
+  const fetchMovies = async (search, type) => {
+    let allMovies = [];
+
+    for (let page = 1; page <= 100; page++) {
+      const response = await fetch(
+        `http://www.omdbapi.com/?apikey=${key}&type=${type}&s=${search}&page=${page}`
+      );
+      const data = await response.json();
+      if (data.Response === "True") {
+        allMovies = allMovies.concat(data.Search);
+      } else {
+        <p>no match found</p>;
+        break;
+      }
+    }
+
+    setMovies(allMovies);
+  };
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(event);
+    fetchMovies(search, type);
   }
 
   function handleSearch(event) {
-    console.log(event);
+    setSearch(event.target.value);
+  }
+  function handleType(event) {
+    setType(event.target.value);
   }
 
   return (
@@ -38,14 +53,14 @@ function App() {
           <label className="block text-sm font-medium text-gray-700">
             Search Type
           </label>
-          <select>
+          <select onChange={handleType}>
             <option name="movie" value="movie">
               Movie
             </option>
             <option name="series" value="series">
               Series
             </option>
-            <option name="series" value="episode">
+            <option name="episode" value="episode">
               Episode
             </option>
           </select>
@@ -54,7 +69,6 @@ function App() {
           <input
             className="border border-gray-300 focus:outline-none focus:border-blue-500 rounded-full py-2 px-4"
             name="query"
-            value={search}
             type="search"
             placeholder="Search"
             onChange={handleSearch}
@@ -85,7 +99,7 @@ function App() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {Object.values(movies.Search).map((movie) => (
+            {movies.map((movie) => (
               <tr key={movie.imdbID}>
                 <td className="px-6 py-4 whitespace-nowrap">{movie.Title}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{movie.Year}</td>
@@ -103,7 +117,7 @@ function App() {
           </tbody>
         </table>
       ) : (
-        <p>Loading...</p>
+        <p>Ready to search</p>
       )}
     </div>
   );
@@ -169,3 +183,11 @@ export default App;
 //     ) : (
 //       <p>Loading...</p>
 //     )}
+
+// useEffect(() => {
+//   fetch(
+//     `http://www.omdbapi.com/?apikey=${key}&type=${type}&s=${search}&page=1-100`
+//   )
+//     .then((response) => response.json())
+//     .then((data) => setMovies(data));
+// }, [type, search]);
