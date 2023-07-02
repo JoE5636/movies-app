@@ -24,11 +24,13 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <h1>Movie List</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="gap-10">
+      <h1 className="text-3xl font-bold text-blue-500">Movie List</h1>
+      <form className="flex gap-8" onSubmit={handleSubmit}>
         <div>
-          <label>Search Type</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Search Type
+          </label>
           <select>
             <option name="movie" value="movie">
               Movie
@@ -43,6 +45,7 @@ function App() {
         </div>
         <div>
           <input
+            className="border border-gray-300 focus:outline-none focus:border-blue-500 rounded-full py-2 px-4"
             name="query"
             value={search}
             type="search"
@@ -50,25 +53,37 @@ function App() {
             onChange={handleSearch}
           ></input>
         </div>
-        <input type="submit" value="Search" />
+        <input
+          type="submit"
+          value="Search"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        />
       </form>
       {movies !== null ? (
-        <table>
-          <thead>
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-100">
             <tr>
-              <th>Title</th>
-              <th>Year</th>
-              <th>Type</th>
-              <th>Poster</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Title
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Year
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Type
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Poster
+              </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white divide-y divide-gray-200">
             {Object.values(movies.Search).map((movie) => (
               <tr key={movie.imdbID}>
-                <td>{movie.Title}</td>
-                <td>{movie.Year}</td>
-                <td>{movie.Type}</td>
-                <td>
+                <td className="px-6 py-4 whitespace-nowrap">{movie.Title}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{movie.Year}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{movie.Type}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
                   <img
                     width="150px"
                     height="200px"
