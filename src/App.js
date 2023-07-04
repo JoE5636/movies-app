@@ -4,22 +4,30 @@ function App() {
   const [movies, setMovies] = useState(null);
   const [search, setSearch] = useState("");
   const [type, setType] = useState("");
+  // const [loading, setLaoding] = useState(true);
+  // const [error, setError] = useState(null);
 
   const key = "3b67358c";
 
   const fetchMovies = async (search, type) => {
     let allMovies = [];
 
-    for (let page = 1; page <= 100; page++) {
+    const response = await fetch(
+      `http://www.omdbapi.com/?apikey=${key}&type=${type}&s=${search}&page=$1`
+    );
+    const data = await response.json();
+    const totalResults = Math.floor(+data.totalResults / 10);
+    if (data.Response === "True") {
+      allMovies = allMovies.concat(data.Search);
+    }
+
+    for (let i = 2; i <= totalResults; i++) {
       const response = await fetch(
-        `http://www.omdbapi.com/?apikey=${key}&type=${type}&s=${search}&page=${page}`
+        `http://www.omdbapi.com/?apikey=${key}&type=${type}&s=${search}&page=${i}`
       );
       const data = await response.json();
       if (data.Response === "True") {
         allMovies = allMovies.concat(data.Search);
-      } else {
-        <p>no match found</p>;
-        break;
       }
     }
 
@@ -80,6 +88,7 @@ function App() {
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-sm"
         />
       </form>
+      {/* {loading ? <p></p> : <p>Loading...</p>} */}
       {movies !== null ? (
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">
